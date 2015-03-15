@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package microwave;
 
 import java.awt.event.ActionEvent;
@@ -11,10 +6,6 @@ import java.text.DecimalFormat;
 import javax.swing.Timer;
 import java.awt.Color;
 
-/**
- *
- * @author rob
- */
 public class MicrowaveFrame extends javax.swing.JFrame
 {
     int hours, minutes, seconds;
@@ -127,13 +118,6 @@ public class MicrowaveFrame extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Microwave");
-        addComponentListener(new java.awt.event.ComponentAdapter()
-        {
-            public void componentResized(java.awt.event.ComponentEvent evt)
-            {
-                formComponentResized(evt);
-            }
-        });
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
 
         cookPanel.setBackground(new java.awt.Color(102, 102, 102));
@@ -187,13 +171,6 @@ public class MicrowaveFrame extends javax.swing.JFrame
         innerTimesPanel.add(oneMin);
 
         fiveMin.setText("5m");
-        fiveMin.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                fiveMinActionPerformed(evt);
-            }
-        });
         innerTimesPanel.add(fiveMin);
 
         tenMin.setText("10m");
@@ -251,16 +228,6 @@ public class MicrowaveFrame extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fiveMinActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_fiveMinActionPerformed
-    {//GEN-HEADEREND:event_fiveMinActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fiveMinActionPerformed
-
-    private void formComponentResized(java.awt.event.ComponentEvent evt)//GEN-FIRST:event_formComponentResized
-    {//GEN-HEADEREND:event_formComponentResized
-        
-    }//GEN-LAST:event_formComponentResized
 
     /**
      * @param args the command line arguments
