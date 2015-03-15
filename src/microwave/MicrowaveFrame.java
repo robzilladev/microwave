@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import javax.swing.Timer;
+import java.awt.Color;
 
 /**
  *
@@ -24,6 +25,8 @@ public class MicrowaveFrame extends javax.swing.JFrame
     String status = "Cooking";
     Boolean cooking = false;
     Boolean open = false;
+    
+    Color standby,ready,cookingC,stopped;
     
     Timer timer;
     
@@ -58,6 +61,10 @@ public class MicrowaveFrame extends javax.swing.JFrame
         fmt = new DecimalFormat("#00.##");
         fmt.setDecimalSeparatorAlwaysShown(false);
         
+        standby = new Color(171,245,182);
+        ready = new Color(122,255,117);
+        cookingC = new Color(255,217,92);
+        stopped = new Color(252,88,88);
         
     }
     
@@ -119,6 +126,7 @@ public class MicrowaveFrame extends javax.swing.JFrame
         openButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Microwave");
         addComponentListener(new java.awt.event.ComponentAdapter()
         {
             public void componentResized(java.awt.event.ComponentEvent evt)
@@ -129,14 +137,15 @@ public class MicrowaveFrame extends javax.swing.JFrame
         getContentPane().setLayout(new java.awt.BorderLayout(0, 2));
 
         cookPanel.setBackground(new java.awt.Color(102, 102, 102));
-        cookPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        cookPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         cookPanel.setPreferredSize(new java.awt.Dimension(400, 300));
         cookPanel.setLayout(new java.awt.GridLayout(1, 1));
 
         cookingLabel.setBackground(new java.awt.Color(204, 255, 255));
         cookingLabel.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        cookingLabel.setForeground(new java.awt.Color(51, 51, 51));
         cookingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cookingLabel.setText("Cooking");
+        cookingLabel.setText("Standing by...");
         cookingLabel.setOpaque(true);
         cookPanel.add(cookingLabel);
 
@@ -147,7 +156,7 @@ public class MicrowaveFrame extends javax.swing.JFrame
         controlPanel.setLayout(new java.awt.GridLayout(4, 0));
 
         displayPanel.setPreferredSize(new java.awt.Dimension(240, 100));
-        displayPanel.setLayout(new java.awt.GridLayout());
+        displayPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         display.setBackground(new java.awt.Color(102, 102, 102));
         display.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -427,8 +436,6 @@ public class MicrowaveFrame extends javax.swing.JFrame
             // Update display
             display.setText(fmt.format(hours) + ":" + fmt.format(minutes) + 
                             ":" + fmt.format(seconds));
-            
-            System.out.println(totalSeconds);
         }
     
     }
@@ -440,24 +447,40 @@ public class MicrowaveFrame extends javax.swing.JFrame
         {
             if (e.getSource() == clearButton)
             {
-                clear();   
+                clear();  
+                cookingLabel.setText("Standing by...");
+                cookingLabel.setBackground(standby);
             }
             else if (e.getSource() == startButton)
             {
-                if (!open)
+                if (seconds > 0 || minutes > 0 || hours > 0)
                 {
-                    timer.start();
-                    cooking = true;
-                    cookingLabel.setText("Cooking");
+                    if (!open)
+                    {
+                        timer.start();
+                        cooking = true;
+                        cookingLabel.setText("Cooking");
+                        cookingLabel.setBackground(cookingC);
+                    }
+                    else
+                        cookingLabel.setText("Close the door.");
                 }
-                else
-                    cookingLabel.setText("Close the door.");
             }
             else if (e.getSource() == stopButton)
             {
-                timer.stop();
-                cooking = false;
-                cookingLabel.setText("Stopped.");
+                if (cooking)
+                {
+                    timer.stop();
+                    cooking = false;
+                    cookingLabel.setText("Stopped.");
+                    cookingLabel.setBackground(stopped);
+                }
+                else
+                {
+                    clear();
+                    cookingLabel.setText("Standing by...");
+                    cookingLabel.setBackground(standby);
+                }
             }
             else
             {
@@ -465,10 +488,12 @@ public class MicrowaveFrame extends javax.swing.JFrame
                 {
                     open = false;
                     cookingLabel.setText("Door closed.");
+                    cookingLabel.setBackground(standby);
                 }
                 else
                 {
                     cookingLabel.setText("Door open.");
+                    cookingLabel.setBackground(stopped);
                     open = true;
                     timer.stop();
                 }
@@ -487,8 +512,8 @@ public class MicrowaveFrame extends javax.swing.JFrame
             if (hours == 0 && minutes == 0 && seconds == 0)
             {
                 timer.stop();
-                System.out.println("Finished");
                 cookingLabel.setText("Food is ready.");
+                cookingLabel.setBackground(ready);
             }
             else
             {
